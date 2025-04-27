@@ -264,7 +264,7 @@ namespace TestCryption
 
             try
             {
-                using (RSA rsa = RSA.Create(2048)) // Specify key size on creation
+                using (RSA rsa = new RSACng(2048)) // Specify key size on creation
                 {
                     string publicPrivateKeyXml = rsa.ToXmlString(true);
                     File.WriteAllText(filePath, publicPrivateKeyXml, Encoding.UTF8);
@@ -623,8 +623,7 @@ namespace TestCryption
                     byte[] combinedData = aesIv.Concat(aesKey).ToArray();
 
                     // 4. Encrypt using RSA (OAEP padding recommended)
-                    //byte[] encryptedData = rsa.Encrypt(combinedData, RSAEncryptionPadding.OaepSHA256);
-                    byte[] encryptedData = rsa.Encrypt(combinedData, RSAEncryptionPadding.OaepSHA1);
+                    byte[] encryptedData = rsa.Encrypt(combinedData, RSAEncryptionPadding.OaepSHA256);
 
                     // 5. Convert to Base64 and Save
                     string base64Encrypted = Convert.ToBase64String(encryptedData);
@@ -681,7 +680,7 @@ namespace TestCryption
                     byte[] encryptedData = Convert.FromBase64String(base64Encrypted);
 
                     // 3. Decrypt using RSA
-                    byte[] decryptedCombinedData = rsa.Decrypt(encryptedData, RSAEncryptionPadding.OaepSHA1);
+                    byte[] decryptedCombinedData = rsa.Decrypt(encryptedData, RSAEncryptionPadding.OaepSHA256);
 
                     // 4. Split IV and Key
                     if (decryptedCombinedData.Length <= AesBlockSizeInBytes)
@@ -912,7 +911,7 @@ namespace TestCryption
             try
             {
                 string xmlString = File.ReadAllText(filePath);
-                RSA rsa = RSA.Create();
+                RSA rsa = new RSACng();
                 rsa.FromXmlString(xmlString);
 
                 // If private key is required, check if it loaded successfully
