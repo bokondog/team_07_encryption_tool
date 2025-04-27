@@ -1,0 +1,84 @@
+﻿<Window x:Class="TestCryption.SplashWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TestCryption"
+        mc:Ignorable="d"
+        Title="Loading..."
+        Height="300" Width="500"
+        AllowsTransparency="True" WindowStyle="None" Background="Transparent"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="False">
+
+    <Window.Resources>
+        <!-- Use brushes similar to the main window for consistency -->
+        <SolidColorBrush x:Key="SplashBackgroundBrush" Color="#FF2D2D30"/>
+        <SolidColorBrush x:Key="SplashAccentBrush" Color="#FF00AADE"/>
+        <!-- Cyber Blue -->
+        <SolidColorBrush x:Key="SplashTextBrush" Color="#FFCCCCCC"/>
+
+        <!-- Animation Storyboard -->
+        <Storyboard x:Key="SplashAnimation">
+            <!-- Icon Fade In & Pulse -->
+            <DoubleAnimation Storyboard.TargetName="LockIcon"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0" To="1" Duration="0:0:0.8" BeginTime="0:0:0.2"/>
+            <DoubleAnimation Storyboard.TargetName="LockIcon"
+                             Storyboard.TargetProperty="(UIElement.Opacity)"
+                             From="0.7" To="1.0" Duration="0:0:0.6" BeginTime="0:0:1.0"
+                             AutoReverse="True" RepeatBehavior="Forever"/>
+
+            <!-- Text Fade In -->
+            <DoubleAnimation Storyboard.TargetName="LoadingText"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0" To="1" Duration="0:0:0.8" BeginTime="0:0:0.5"/>
+
+            <!-- Optional: Subtle background element animation (e.g., binary trail) -->
+            <DoubleAnimation Storyboard.TargetName="BinaryTrail"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0" To="0.15" Duration="0:0:1.5" BeginTime="0:0:0.7"
+                             AutoReverse="True" RepeatBehavior="Forever"/>
+        </Storyboard>
+    </Window.Resources>
+
+    <Border Background="{StaticResource SplashBackgroundBrush}" CornerRadius="5" BorderBrush="#FF444444" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
+                <!-- Spacer -->
+            </Grid.RowDefinitions>
+
+            <!-- Optional: Subtle background element -->
+            <TextBlock x:Name="BinaryTrail" Grid.RowSpan="3" TextWrapping="Wrap" FontSize="18"
+                       Foreground="{StaticResource SplashAccentBrush}" Opacity="0" FontFamily="Consolas" Margin="10">
+                01101001 01101110 01101001 01110100 00100000 00110001 00100000 01100110 01100001 01101001 01101100 00100000 01110011 01100101 01100011 01110101 01110010 01100101 00100000 01110011 01111001 01110011 01110100 01100101 01101101 00100000 01101100 01101111 01100001 01100100 00100000 01100101 01101110 01100111 01100001 01100111 01100101 00100000 00110010 00110011 00100000 01100010 01101111 01101111 01110100 00100000 01110011 01100101 01110001 01110101 01100101 01101110 01100011 01100101 00100000 01110000 01110010 01101111 01100011 01100101 01110011 01110011 00100000 01110010 01110101 01101110 00100000 01100001 01110101 01110100 01101000 00100000 01100011 01101000 01100101 01100011 01101011 00100000 01101111 01101011 00101110 00101110 00101110 00100000 01101011 01100101 01111001 00100000 01110110 01100101 01110010 01101001 01100110 01111001 00100000 01110000 01100001 01110011 01110011 00101110 00101110 00101110 00100000 01101100 01101111 01100001 01100100 01101001 01101110 01100111 00100000 01101101 01101111 01100100 01110101 01101100 01100101 01110011 00101110 00101110 00101110
+            </TextBlock>
+
+            <!-- Lock Icon (Path data for a simple padlock) -->
+            <Path x:Name="LockIcon" Grid.Row="0"
+                  Data="M20,10 C20,6.686 17.314,4 14,4 C10.686,4 8,6.686 8,10 L8,12 L7,12 C5.895,12 5,12.895 5,14 L5,22 C5,23.105 5.895,24 7,24 L21,24 C22.105,24 23,23.105 23,22 L23,14 C23,12.895 22.105,12 21,12 L20,12 L20,10 M18,10 L18,12 L10,12 L10,10 C10,7.791 11.791,6 14,6 C16.209,6 18,7.791 18,10 M14,17 C13.448,17 13,17.448 13,18 C13,18.552 13.448,19 14,19 C14.552,19 15,18.552 15,18 C15,17.448 14.552,17 14,17"
+                  Fill="{StaticResource SplashAccentBrush}"
+                  Stretch="Uniform" Width="80" Height="80"
+                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                  Opacity="0"/>
+            <!-- Start invisible for fade-in -->
+
+            <!-- Loading Text -->
+            <TextBlock x:Name="LoadingText" Grid.Row="1"
+                       Text="Initializing Security Subsystems..."
+                       Foreground="{StaticResource SplashTextBrush}"
+                       FontSize="16" HorizontalAlignment="Center"
+                       Opacity="0"/>
+            <!-- Start invisible for fade-in -->
+        </Grid>
+    </Border>
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource SplashAnimation}"/>
+        </EventTrigger>
+    </Window.Triggers>
+</Window>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TestCryption"
         mc:Ignorable="d"
-    Title="TestCryption Title" Height="750" Width="700" MinWidth="650" MinHeight="700" Background="#FF3F3F46">
+    Title="Encryption Tool (TEAM 07)" Height="750" Width="700" MinWidth="650" MinHeight="700" Background="#FF3F3F46">
     <Window.Resources>
         <!-- Simple Dark Theme Brushes -->
         <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FF2D2D30"/>
