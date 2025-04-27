@@ -1,153 +1,361 @@
-﻿<Window x:Class="EncryptionTool.MainWindow"
+﻿<Window x:Class="TestCryption.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:EncryptionTool"
+        xmlns:local="clr-namespace:TestCryption"
         mc:Ignorable="d"
-        Title="Encryption Tool (TEAM 07)" Height="450" Width="600"
-        Background="#FF2D2D30"
-        Foreground="#FFCCCCCC">
-
-    <Window.Resources>
-        <!-- Simple Dark Theme Styles -->
-        <Style TargetType="TabControl">
-            <Setter Property="Background" Value="#FF3F3F46"/>
-            <Setter Property="BorderBrush" Value="#FF555555"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-
-        <Style TargetType="TabItem">
-            <Setter Property="Background" Value="#FF3F3F46"/>
-            <Setter Property="Foreground" Value="#FFCCCCCC"/>
-            <Setter Property="BorderBrush" Value="#FF555555"/>
-            <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="TabItem">
-                        <Grid>
-                            <Border Name="Border"
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="1,1,1,0"
-                                    CornerRadius="4,4,0,0"
-                                    Margin="0,0,-1,0">
-                                <ContentPresenter x:Name="ContentSite"
-                                                  VerticalAlignment="Center"
-                                                  HorizontalAlignment="Center"
-                                                  ContentSource="Header"
-                                                  Margin="{TemplateBinding Padding}"/>
-                            </Border>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#FF4F4F56" />
-                                <Setter Property="Foreground" Value="White"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#FF555555" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style TargetType="Grid">
-            <!-- Ensure Grid inside TabItem content area has dark background -->
-            <Setter Property="Background" Value="#FF4F4F56"/>
-        </Style>
-
-        <Style TargetType="Button">
-            <Setter Property="Background" Value="#FF555555"/>
-            <Setter Property="Foreground" Value="#FFCCCCCC"/>
-            <Setter Property="BorderBrush" Value="#FF666666"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="Margin" Value="5"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#FF6A6A6A"/>
-                    <Setter Property="BorderBrush" Value="#FF777777"/>
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#FF4A4A4A"/>
-                    <Setter Property="BorderBrush" Value="#FF555555"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style TargetType="TextBox">
-            <Setter Property="Background" Value="#FF3F3F46"/>
-            <Setter Property="Foreground" Value="#FFCCCCCC"/>
-            <Setter Property="BorderBrush" Value="#FF555555"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="CaretBrush" Value="#FFCCCCCC"/>
-            <!-- Make cursor visible -->
-            <Setter Property="SelectionBrush" Value="#FF007ACC"/>
-            <!-- Standard selection color -->
-        </Style>
-
-        <Style TargetType="Label">
-            <Setter Property="Foreground" Value="#FFCCCCCC"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-
-    </Window.Resources>
-
+    Title="TestCryption Title" Height="750" Width="700" MinWidth="650" MinHeight="700">
     <Grid Margin="10">
         <TabControl>
-
-            <!-- Tab 1: Key Generation -->
-            <TabItem Header="Key generation">
-                <Grid Margin="10">
+            <!-- Key Management Tab -->
+            <TabItem Header="Key Management">
+                <Grid Margin="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <!-- Row for Label and TextBox -->
                         <RowDefinition Height="Auto"/>
-                        <!-- Row for Buttons -->
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
-                        <!-- Extra space -->
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Settings Section -->
+                    <GroupBox Header="Settings" Grid.Row="0" Margin="0,0,0,10">
+                        <StackPanel Orientation="Vertical">
+                            <Label Content="Default Key Folder:"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="DefaultFolderTextBox" Grid.Column="0" IsReadOnly="True" VerticalContentAlignment="Center"/>
+                                <Button x:Name="BrowseKeyFolderButton" Grid.Column="1" Content="Browse..." Margin="5,0,0,0" Padding="5,2" Click="BrowseKeyFolderButton_Click"/>
+                            </Grid>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Key Generation Section -->
+                    <Grid Grid.Row="1" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- AES Generation -->
+                        <GroupBox Header="Generate AES Key (Symmetric)" Grid.Column="0" Margin="0,0,5,0">
+                            <StackPanel>
+                                <Label Content="Key Name:"/>
+                                <TextBox x:Name="AesKeyNameTextBox" Margin="0,0,0,5"/>
+                                <Button x:Name="GenerateAesButton" Content="Generate AES Key" Padding="5,2" Click="GenerateAesButton_Click"/>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <!-- RSA Generation -->
+                        <GroupBox Header="Generate RSA Key Pair (Asymmetric)" Grid.Column="1" Margin="5,0,0,0">
+                            <StackPanel>
+                                <Label Content="Key Name:"/>
+                                <TextBox x:Name="RsaKeyNameTextBox" Margin="0,0,0,5"/>
+                                <Button x:Name="GenerateRsaButton" Content="Generate RSA Key Pair" Padding="5,2" Click="GenerateRsaButton_Click"/>
+                            </StackPanel>
+                        </GroupBox>
+                    </Grid>
+
+                    <!-- Status moved outside TabControl -->
+                    <!-- <StatusBar Grid.Row="2" Margin="0,0,0,5"> ... </StatusBar> -->
+
+                    <!-- Key List Section -->
+                    <GroupBox Header="Generated Keys" Grid.Row="3">
+                        <ListView x:Name="KeyListView" Margin="0,5,0,0">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding Name}" />
+                                    <GridViewColumn Header="Type" Width="80" DisplayMemberBinding="{Binding Type}" />
+                                    <GridViewColumn Header="File Path" Width="Auto" DisplayMemberBinding="{Binding FilePath}" />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </GroupBox>
+
+                    <Button x:Name="RefreshKeyListButton" Grid.Row="4" Content="Refresh Key List" HorizontalAlignment="Left" Margin="0,10,0,0" Padding="5,2" Click="RefreshKeyListButton_Click"/>
+                </Grid>
+            </TabItem>
+
+            <!-- Image Encryption/Decryption Tab -->
+            <TabItem Header="Image Encryption/Decryption">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/> <!-- Folder Settings -->
+                        <RowDefinition Height="*"/>    <!-- Encrypt Group -->
+                        <RowDefinition Height="*"/>    <!-- Decrypt Group -->
+                    </Grid.RowDefinitions>
+
+                     <!-- Folder Settings -->
+                    <GroupBox Header="Folder Settings" Grid.Row="0" Margin="0,0,0,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Ciphertext Folder -->
+                             <Label Grid.Row="0" Grid.Column="0" Content="Default Ciphertext Folder:"/>
+                             <Grid Grid.Row="1" Grid.Column="0" Margin="0,0,5,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="CiphertextFolderTextBox" Grid.Column="0" IsReadOnly="True" VerticalContentAlignment="Center"/>
+                                <Button x:Name="BrowseCiphertextFolderButton" Grid.Column="1" Content="Browse..." Margin="5,0,0,0" Padding="5,2" Click="BrowseCiphertextFolderButton_Click"/>
+                            </Grid>
+
+                            <!-- Decrypted Image Folder -->
+                            <Label Grid.Row="0" Grid.Column="1" Content="Default Decrypted Image Folder:" Margin="5,0,0,0"/>
+                            <Grid Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="ImageFolderTextBox" Grid.Column="0" IsReadOnly="True" VerticalContentAlignment="Center"/>
+                                <Button x:Name="BrowseImageFolderButton" Grid.Column="1" Content="Browse..." Margin="5,0,0,0" Padding="5,2" Click="BrowseImageFolderButton_Click"/>
+                            </Grid>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Encryption Section -->
+                    <GroupBox Header="Encrypt Image" Grid.Row="1" Margin="0,5,0,5">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0" Content="Image to Encrypt:" VerticalAlignment="Center"/>
+                            <TextBox x:Name="EncryptImageSourceTextBox" Grid.Row="0" Grid.Column="1" IsReadOnly="True" VerticalContentAlignment="Center" Margin="5,2"/>
+                            <Button x:Name="BrowseEncryptImageButton" Grid.Row="0" Grid.Column="2" Content="Browse..." Padding="5,2" Margin="5,2" Click="BrowseEncryptImageButton_Click"/>
+
+                            <Label Grid.Row="1" Grid.Column="0" Content="AES Key:" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="EncryptAesKeyComboBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,2"
+                                      DisplayMemberPath="Name" SelectedValuePath="FilePath"/>
+
+                            <Label Grid.Row="2" Grid.Column="0" Content="Output Filename:" VerticalAlignment="Center"/>
+                            <TextBox x:Name="EncryptOutputFilenameTextBox" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,2" ToolTip="Filename only (no path or extension). Will be saved as .txt (Base64)"/>
+
+                            <Button x:Name="EncryptButton" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Content="Encrypt Image" Padding="5,2" Margin="5,10,5,5" HorizontalAlignment="Center" Click="EncryptButton_Click"/>
+
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Decryption Section -->
+                    <GroupBox Header="Decrypt Image" Grid.Row="2" Margin="0,5,0,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <!-- Ciphertext Selection -->
+                                <RowDefinition Height="Auto"/>
+                                <!-- Key Selection -->
+                                <RowDefinition Height="Auto"/>
+                                <!-- Output Filename -->
+                                <RowDefinition Height="Auto"/>
+                                <!-- Output Format -->
+                                <RowDefinition Height="Auto"/>
+                                <!-- Decrypt Button -->
+                                <RowDefinition Height="Auto"/>
+                                <!-- Hash Display (New) -->
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <!-- For Refresh button -->
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="5" Grid.Column="0" Content="Ciphertext to Decrypt:" VerticalAlignment="Center"/>
+                             <ComboBox x:Name="DecryptCiphertextComboBox" Grid.Row="5" Grid.Column="1" Margin="5,2"
+                                      DisplayMemberPath="Name" SelectedValuePath="FilePath"/>
+                            <Button x:Name="RefreshCiphertextListButton" Grid.Row="0" Grid.Column="2" Content="Refresh List" Padding="5,2" Margin="5,2" Click="RefreshCiphertextListButton_Click"/>
+
+
+                            <Label Grid.Row="1" Grid.Column="0" Content="AES Key:" VerticalAlignment="Center"/>
+                             <ComboBox x:Name="DecryptAesKeyComboBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,2"
+                                      DisplayMemberPath="Name" SelectedValuePath="FilePath"/>
+
+                             <Label Grid.Row="2" Grid.Column="0" Content="Output Filename:" VerticalAlignment="Center"/>
+                             <TextBox x:Name="DecryptOutputFilenameTextBox" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,2" ToolTip="Filename only (no path or extension)"/>
+
+                             <Label Grid.Row="3" Grid.Column="0" Content="Output Format:" VerticalAlignment="Center"/>
+                             <ComboBox x:Name="DecryptOutputFormatComboBox" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,2">
+                                 <ComboBoxItem Content=".png"/>
+                                 <ComboBoxItem Content=".jpg"/>
+                                 <ComboBoxItem Content=".bmp"/>
+                                 <ComboBoxItem Content=".gif"/>
+                             </ComboBox>
+
+                             <Button x:Name="DecryptButton" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Content="Decrypt Image" Padding="5,2" Margin="5,10,5,5" HorizontalAlignment="Center" Click="DecryptButton_Click"/>
+                             <!-- New Hash Display Area -->
+                             <Label Grid.Row="5" Grid.Column="0" Content="Decrypted File Hash:" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                             <TextBox x:Name="DecryptedFileHashTextBox" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,10,5,0" IsReadOnly="True" VerticalContentAlignment="Center" FontFamily="Consolas" ToolTip="SHA-256 Hash of the saved decrypted file."/>
+
+                        </Grid>
+                    </GroupBox>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="AES Key Encryption (RSA)">
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/> <!-- Folder Settings -->
+                            <RowDefinition Height="*"/>    <!-- Encrypt Group -->
+                            <RowDefinition Height="*"/>    <!-- Decrypt Group -->
+                        </Grid.RowDefinitions>
+
+                         <!-- Folder Settings -->
+                        <GroupBox Header="Folder Setting (Encrypted AES Keys)" Grid.Row="0" Margin="0,0,0,10">
+                             <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                 <Label Grid.Column="0" Content="Encrypted AES Key Folder:" VerticalAlignment="Center"/>
+                                 <TextBox x:Name="EncryptedAesFolderTextBox" Grid.Column="1" IsReadOnly="True" VerticalContentAlignment="Center" Margin="5,0"/>
+                                 <Button x:Name="BrowseEncryptedAesFolderButton" Grid.Column="2" Content="Browse..." Padding="5,2" Click="BrowseEncryptedAesFolderButton_Click"/>
+                             </Grid>
+                        </GroupBox>
+
+                        <!-- AES Key Encryption Section -->
+                        <GroupBox Header="Encrypt AES Key" Grid.Row="1" Margin="0,5,0,5">
+                            <Grid>
+                                 <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label Grid.Row="0" Grid.Column="0" Content="AES Key to Encrypt:" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="EncryptRsaAesKeyComboBox" Grid.Row="0" Grid.Column="1" Margin="5,2"
+                                          DisplayMemberPath="Name" SelectedValuePath="FilePath"/>
+
+                                <Label Grid.Row="1" Grid.Column="0" Content="RSA Public Key:" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="EncryptRsaPublicKeyComboBox" Grid.Row="1" Grid.Column="1" Margin="5,2"
+                                          DisplayMemberPath="Name" SelectedValuePath="FilePath"/>
+
+                                <Label Grid.Row="2" Grid.Column="0" Content="Output Filename:" VerticalAlignment="Center"/>
+                                <TextBox x:Name="EncryptRsaOutputFilenameTextBox" Grid.Row="2" Grid.Column="1" Margin="5,2" ToolTip="Filename only (no path or extension). Will be saved as .txt (Base64)"/>
+
+                                <Button x:Name="EncryptAesKeyButton" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="Encrypt AES Key with RSA" Padding="5,2" Margin="5,10,5,5" HorizontalAlignment="Center" Click="EncryptAesKeyButton_Click"/>
+
+                            </Grid>
+                        </GroupBox>
+
+                        <!-- AES Key Decryption Section -->
+                         <GroupBox Header="Decrypt AES Key" Grid.Row="2" Margin="0,5,0,0">
+                             <Grid>
+                                 <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/> <!-- For Refresh button -->
+                                </Grid.ColumnDefinitions>
+
+                                 <Label Grid.Row="0" Grid.Column="0" Content="Encrypted AES Key:" VerticalAlignment="Center"/>
+                                 <ComboBox x:Name="DecryptRsaEncryptedAesKeyComboBox" Grid.Row="0" Grid.Column="1" Margin="5,2"
+                                          DisplayMemberPath="Name" SelectedValuePath="FilePath"/>
+                                 <Button x:Name="RefreshEncryptedAesListButton" Grid.Row="0" Grid.Column="2" Content="Refresh List" Padding="5,2" Margin="5,2" Click="RefreshEncryptedAesListButton_Click"/>
+
+
+                                 <Label Grid.Row="1" Grid.Column="0" Content="RSA Private Key:" VerticalAlignment="Center"/>
+                                 <ComboBox x:Name="DecryptRsaPrivateKeyComboBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,2"
+                                          DisplayMemberPath="Name" SelectedValuePath="FilePath"/>
+
+                                 <Label Grid.Row="2" Grid.Column="0" Content="Output AES Key Name:" VerticalAlignment="Center"/>
+                                 <TextBox x:Name="DecryptRsaOutputFilenameTextBox" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,2" ToolTip="Name for the decrypted AES key file (no path/extension). Saved to main key folder."/>
+
+
+                                 <Button x:Name="DecryptAesKeyButton" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Content="Decrypt AES Key with RSA" Padding="5,2" Margin="5,10,5,5" HorizontalAlignment="Center" Click="DecryptAesKeyButton_Click"/>
+
+                                 <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" TextWrapping="Wrap" Margin="5" Foreground="Gray">
+                                     Note: Decrypted AES keys will be saved to the main 'Default Key Folder' (set in the Key Management tab) in the standard AES format (<Run FontWeight="Bold">KeyName_aes.txt</Run>).
+                                 </TextBlock>
+
+                            </Grid>
+                        </GroupBox>
+
+                    </Grid>
+            </TabItem>
+            <TabItem Header="File Hash Verification">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/> <!-- File 1 Selection -->
+                        <RowDefinition Height="Auto"/> <!-- File 1 Hash -->
+                        <RowDefinition Height="Auto"/> <!-- File 2 Selection -->
+                        <RowDefinition Height="Auto"/> <!-- File 2 Hash -->
+                        <RowDefinition Height="Auto"/> <!-- Compare Button -->
+                        <RowDefinition Height="Auto"/> <!-- Result -->
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
-                        <!-- Column for Label -->
                         <ColumnDefinition Width="*"/>
-                        <!-- Column for TextBox -->
+                        <ColumnDefinition Width="Auto"/> <!-- Browse Buttons -->
                     </Grid.ColumnDefinitions>
 
-                    <!-- Row 0: Key Name Input -->
-                    <Label Grid.Row="0" Grid.Column="0" Content="Key name:" Margin="0,0,10,0"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="KeyNameTextBox" VerticalAlignment="Center" Margin="0,0,0,10"/>
+                    <!-- File 1 -->
+                    <Label Grid.Row="0" Grid.Column="0" Content="File 1:" VerticalAlignment="Center"/>
+                    <TextBox x:Name="HashFile1TextBox" Grid.Row="0" Grid.Column="1" Margin="5" IsReadOnly="True" VerticalContentAlignment="Center"/>
+                    <Button x:Name="BrowseHashFile1Button" Grid.Row="0" Grid.Column="2" Content="Browse..." Padding="5,2" Margin="5" Click="BrowseHashFile1Button_Click"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="Hash (SHA-256):" VerticalAlignment="Center"/>
+                    <TextBox x:Name="HashFile1ResultTextBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" IsReadOnly="True" VerticalContentAlignment="Center" FontFamily="Consolas"/>
 
-                    <!-- Row 1: Buttons -->
-                    <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                Orientation="Horizontal"
-                                HorizontalAlignment="Center"
-                                Margin="0,10,0,0">
-                        <Button Content="Generate AES key" x:Name="GenerateAesButton"/>
-                        <Button Content="Generate RSA key" x:Name="GenerateRsaButton"/>
-                    </StackPanel>
+                     <!-- File 2 -->
+                    <Label Grid.Row="2" Grid.Column="0" Content="File 2:" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                    <TextBox x:Name="HashFile2TextBox" Grid.Row="2" Grid.Column="1" Margin="5,15,5,5" IsReadOnly="True" VerticalContentAlignment="Center"/>
+                    <Button x:Name="BrowseHashFile2Button" Grid.Row="2" Grid.Column="2" Content="Browse..." Padding="5,2" Margin="5,15,5,5" Click="BrowseHashFile2Button_Click"/>
+                    <Label Grid.Row="3" Grid.Column="0" Content="Hash (SHA-256):" VerticalAlignment="Center"/>
+                    <TextBox x:Name="HashFile2ResultTextBox" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" IsReadOnly="True" VerticalContentAlignment="Center" FontFamily="Consolas"/>
+
+                    <!-- Compare Button -->
+                    <Button x:Name="CompareHashesButton" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Content="Compare File Hashes" Padding="5" Margin="10,15,10,5" HorizontalAlignment="Center" Click="CompareHashesButton_Click"/>
+
+                    <!-- Result Indicator -->
+                    <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" x:Name="HashComparisonResultTextBlock" Margin="5,10,5,5" HorizontalAlignment="Center" FontSize="14" FontWeight="Bold"/>
+
                 </Grid>
             </TabItem>
-
-            <!-- Tab 2: AES -->
-            <TabItem Header="AES">
-                <!-- Empty Grid as requested -->
-                <Grid>
-                    <!-- Content for AES tab goes here -->
-                </Grid>
-            </TabItem>
-
-            <!-- Tab 3: RSA -->
-            <TabItem Header="RSA">
-                <!-- Empty Grid as requested -->
-                <Grid>
-                    <!-- Content for RSA tab goes here -->
-                </Grid>
-            </TabItem>
-
         </TabControl>
+        
+        <!-- Status Bar moved outside TabControl to be always visible -->
+        <StatusBar Grid.Row="1" VerticalAlignment="Bottom" Margin="0,5,0,0">
+             <StatusBarItem>
+                <TextBlock x:Name="StatusTextBlock" Text="Ready"/>
+            </StatusBarItem>
+        </StatusBar>
+
     </Grid>
 </Window>
