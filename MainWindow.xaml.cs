@@ -6,10 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Media; // For Brushes
 using WinForms = System.Windows.Forms;
 
@@ -31,7 +29,7 @@ namespace TestCryption
         // Standard AES block size in bytes (used for IV)
         private const int AesBlockSizeInBytes = 16; // 128 bits / 8 bits/byte
 
-         // Hashing algorithm instance (reusable) - Use SHA256 consistently
+        // Hashing algorithm instance (reusable) - Use SHA256 consistently
         private static readonly HashAlgorithmName _hashAlgorithmName = HashAlgorithmName.SHA256;
         // Note: For performance with large files, you might create instances within methods
         // using 'using var sha256 = SHA256.Create();' instead of reusing a single static instance if thread safety becomes complex.
@@ -67,15 +65,16 @@ namespace TestCryption
 
 
             // Initial status check - can be more specific if needed
-             if (string.IsNullOrWhiteSpace(_defaultKeyFolder) || !Directory.Exists(_defaultKeyFolder) ||
-                string.IsNullOrWhiteSpace(_defaultCiphertextFolder) || !Directory.Exists(_defaultCiphertextFolder) ||
-                string.IsNullOrWhiteSpace(_defaultImageFolder) || !Directory.Exists(_defaultImageFolder) ||
-                string.IsNullOrWhiteSpace(_defaultEncryptedAesFolder) || !Directory.Exists(_defaultEncryptedAesFolder))
+            if (string.IsNullOrWhiteSpace(_defaultKeyFolder) || !Directory.Exists(_defaultKeyFolder) ||
+               string.IsNullOrWhiteSpace(_defaultCiphertextFolder) || !Directory.Exists(_defaultCiphertextFolder) ||
+               string.IsNullOrWhiteSpace(_defaultImageFolder) || !Directory.Exists(_defaultImageFolder) ||
+               string.IsNullOrWhiteSpace(_defaultEncryptedAesFolder) || !Directory.Exists(_defaultEncryptedAesFolder))
             {
-                 UpdateStatus("Tip: Set and verify default folders in Settings and Encryption tabs.");
+                UpdateStatus("Tip: Set and verify default folders in Settings and Encryption tabs.");
             }
-            else {
-                 UpdateStatus("Settings loaded.");
+            else
+            {
+                UpdateStatus("Settings loaded.");
             }
         }
 
@@ -106,7 +105,7 @@ namespace TestCryption
 
         private void BrowseCiphertextFolderButton_Click(object sender, RoutedEventArgs e)
         {
-             string selectedFolder = BrowseForFolder("Select Default Folder for Image Ciphertext Files", _defaultCiphertextFolder);
+            string selectedFolder = BrowseForFolder("Select Default Folder for Image Ciphertext Files", _defaultCiphertextFolder);
             if (!string.IsNullOrEmpty(selectedFolder))
             {
                 _defaultCiphertextFolder = selectedFolder;
@@ -119,7 +118,7 @@ namespace TestCryption
 
         private void BrowseImageFolderButton_Click(object sender, RoutedEventArgs e)
         {
-             string selectedFolder = BrowseForFolder("Select Default Folder for Decrypted Images", _defaultImageFolder);
+            string selectedFolder = BrowseForFolder("Select Default Folder for Decrypted Images", _defaultImageFolder);
             if (!string.IsNullOrEmpty(selectedFolder))
             {
                 _defaultImageFolder = selectedFolder;
@@ -129,7 +128,7 @@ namespace TestCryption
             }
         }
 
-         private void BrowseEncryptedAesFolderButton_Click(object sender, RoutedEventArgs e) // New
+        private void BrowseEncryptedAesFolderButton_Click(object sender, RoutedEventArgs e) // New
         {
             string selectedFolder = BrowseForFolder("Select Default Folder for Encrypted AES Keys", _defaultEncryptedAesFolder);
             if (!string.IsNullOrEmpty(selectedFolder))
@@ -154,7 +153,7 @@ namespace TestCryption
                 EncryptImageSourceTextBox.Text = openFileDialog.FileName;
             }
         }
-            
+
         private void BrowseHashFile1Button_Click(object sender, RoutedEventArgs e)
         {
             string filePath = BrowseForFile("Select First File for Hashing");
@@ -173,7 +172,7 @@ namespace TestCryption
             if (!string.IsNullOrEmpty(filePath))
             {
                 HashFile2TextBox.Text = filePath;
-                 // Clear results when file changes
+                // Clear results when file changes
                 HashFile2ResultTextBox.Clear();
                 HashComparisonResultTextBlock.Text = "";
             }
@@ -192,12 +191,12 @@ namespace TestCryption
 
         private string BrowseForFolder(string description, string initialPath)
         {
-             var dialog = new WinForms.FolderBrowserDialog { Description = description };
-             if (!string.IsNullOrWhiteSpace(initialPath) && Directory.Exists(initialPath))
-             {
-                 dialog.SelectedPath = initialPath;
-             }
-             return dialog.ShowDialog() == WinForms.DialogResult.OK ? dialog.SelectedPath : null;
+            var dialog = new WinForms.FolderBrowserDialog { Description = description };
+            if (!string.IsNullOrWhiteSpace(initialPath) && Directory.Exists(initialPath))
+            {
+                dialog.SelectedPath = initialPath;
+            }
+            return dialog.ShowDialog() == WinForms.DialogResult.OK ? dialog.SelectedPath : null;
         }
 
 
@@ -251,7 +250,7 @@ namespace TestCryption
             string fileName = keyName + RsaSuffix;
             string filePath = Path.Combine(_defaultKeyFolder, fileName);
 
-             if (File.Exists(filePath))
+            if (File.Exists(filePath))
             {
                 var result = System.Windows.MessageBox.Show($"File '{fileName}' already exists. Overwrite?", "Confirm Overwrite", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.No)
@@ -286,7 +285,7 @@ namespace TestCryption
         { RefreshKeyList(); UpdateStatus("Key list refreshed."); }
         private void RefreshCiphertextListButton_Click(object sender, RoutedEventArgs e)
         { RefreshCiphertextList(); UpdateStatus("Image ciphertext list refreshed."); }
-         private void RefreshEncryptedAesListButton_Click(object sender, RoutedEventArgs e) // New
+        private void RefreshEncryptedAesListButton_Click(object sender, RoutedEventArgs e) // New
         { RefreshEncryptedAesKeyList(); UpdateStatus("Encrypted AES key list refreshed."); }
 
 
@@ -363,7 +362,7 @@ namespace TestCryption
             }
             catch (Exception ex)
             {
-               HandleError($"Error reading key directory: {ex.Message}");
+                HandleError($"Error reading key directory: {ex.Message}");
             }
         }
 
@@ -372,7 +371,7 @@ namespace TestCryption
             DecryptCiphertextComboBox.ItemsSource = null; DecryptCiphertextComboBox.Items.Clear();
             if (!IsFolderValid(_defaultCiphertextFolder, null)) return;
 
-             try
+            try
             {
                 var ciphertextFiles = Directory.GetFiles(_defaultCiphertextFolder, $"*{CiphertextSuffix}")
                                                .Where(f => !f.EndsWith(AesSuffix, StringComparison.OrdinalIgnoreCase) && // Exclude actual keys
@@ -391,7 +390,7 @@ namespace TestCryption
             DecryptRsaEncryptedAesKeyComboBox.ItemsSource = null; DecryptRsaEncryptedAesKeyComboBox.Items.Clear();
             if (!IsFolderValid(_defaultEncryptedAesFolder, null)) return;
 
-             try
+            try
             {
                 // Assuming these are also .txt files. Adjust filter if needed.
                 var encryptedKeyFiles = Directory.GetFiles(_defaultEncryptedAesFolder, $"*{EncryptedAesKeySuffix}")
@@ -431,7 +430,7 @@ namespace TestCryption
 
             if (File.Exists(outputCiphertextPath))
             {
-                 var result = System.Windows.MessageBox.Show($"File '{outputFileName}' already exists in the ciphertext folder. Overwrite?", "Confirm Overwrite", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                var result = System.Windows.MessageBox.Show($"File '{outputFileName}' already exists in the ciphertext folder. Overwrite?", "Confirm Overwrite", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.No)
                 {
                     UpdateStatus("Encryption cancelled.");
@@ -593,7 +592,7 @@ namespace TestCryption
 
             if (File.Exists(outputEncryptedKeyPath))
             {
-                 var result = MessageBox.Show($"File '{outputFileName}' already exists. Overwrite?", "Confirm Overwrite", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                var result = MessageBox.Show($"File '{outputFileName}' already exists. Overwrite?", "Confirm Overwrite", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.No) { UpdateStatus("AES Key encryption cancelled."); return; }
             }
 
@@ -661,11 +660,11 @@ namespace TestCryption
 
             if (File.Exists(outputDecryptedKeyPath))
             {
-                 var result = MessageBox.Show($"AES Key file '{outputKeyName + AesSuffix}' already exists in the main key folder. Overwrite?", "Confirm Overwrite", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                var result = MessageBox.Show($"AES Key file '{outputKeyName + AesSuffix}' already exists in the main key folder. Overwrite?", "Confirm Overwrite", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.No) { UpdateStatus("AES Key decryption cancelled."); return; }
             }
 
-             UpdateStatus("Decrypting AES key...");
+            UpdateStatus("Decrypting AES key...");
             DecryptAesKeyButton.IsEnabled = false; // Disable button
 
             try
@@ -707,9 +706,9 @@ namespace TestCryption
             }
             catch (CryptographicException cryptoEx)
             {
-                 HandleError($"AES Key decryption failed. Likely wrong RSA private key or corrupted data. Details: {cryptoEx.Message}");
+                HandleError($"AES Key decryption failed. Likely wrong RSA private key or corrupted data. Details: {cryptoEx.Message}");
             }
-             catch (FormatException formatEx)
+            catch (FormatException formatEx)
             { HandleError($"Decryption failed. Encrypted key file does not contain valid Base64 data. Details: {formatEx.Message}"); }
             catch (Exception ex)
             { HandleError($"AES Key decryption failed: {ex.Message}"); }
@@ -743,7 +742,7 @@ namespace TestCryption
                 HashFile1TextBox.Focus(); // Highlight the problem field
                 return;
             }
-             if (!File.Exists(file2Path))
+            if (!File.Exists(file2Path))
             {
                 HandleError($"File not found: {file2Path}");
                 HashFile2TextBox.Focus(); // Highlight the problem field
@@ -783,16 +782,16 @@ namespace TestCryption
                 }
                 else
                 {
-                     HashComparisonResultTextBlock.Text = "Error: Could not compare hashes.";
-                     HashComparisonResultTextBlock.Foreground = Brushes.OrangeRed;
-                     // Specific error was already shown by HandleError in helper
+                    HashComparisonResultTextBlock.Text = "Error: Could not compare hashes.";
+                    HashComparisonResultTextBlock.Foreground = Brushes.OrangeRed;
+                    // Specific error was already shown by HandleError in helper
                 }
             }
             catch (Exception ex) // Catch errors during Task execution if helper didn't catch them
             {
-                 HandleError($"Error during hash comparison: {ex.Message}");
-                 HashComparisonResultTextBlock.Text = "Comparison Error";
-                 HashComparisonResultTextBlock.Foreground = Brushes.OrangeRed;
+                HandleError($"Error during hash comparison: {ex.Message}");
+                HashComparisonResultTextBlock.Text = "Comparison Error";
+                HashComparisonResultTextBlock.Foreground = Brushes.OrangeRed;
             }
             finally
             {
@@ -802,14 +801,14 @@ namespace TestCryption
 
         // --- Helper Methods ---
 
-         // New helper method to calculate SHA-256 hash of a file
+        // New helper method to calculate SHA-256 hash of a file
         private string CalculateFileHashAsync(string filePath)
         {
             if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
             {
-                 // Don't pop up a message box here, just return null. Let caller decide.
-                 UpdateStatus($"Hash Error: File not found '{filePath}'");
-                 return null;
+                // Don't pop up a message box here, just return null. Let caller decide.
+                UpdateStatus($"Hash Error: File not found '{filePath}'");
+                return null;
             }
 
             try
@@ -825,18 +824,20 @@ namespace TestCryption
                     }
                 }
             }
-            catch (IOException ioEx) {
-                 HandleError($"Error reading file for hashing '{Path.GetFileName(filePath)}': {ioEx.Message}");
-                 return null; // Return null on error
+            catch (IOException ioEx)
+            {
+                HandleError($"Error reading file for hashing '{Path.GetFileName(filePath)}': {ioEx.Message}");
+                return null; // Return null on error
             }
-            catch (UnauthorizedAccessException uaEx) {
-                 HandleError($"Permission error reading file for hashing '{Path.GetFileName(filePath)}': {uaEx.Message}");
-                 return null;
+            catch (UnauthorizedAccessException uaEx)
+            {
+                HandleError($"Permission error reading file for hashing '{Path.GetFileName(filePath)}': {uaEx.Message}");
+                return null;
             }
             catch (Exception ex)
             {
-                 HandleError($"Error calculating hash for '{Path.GetFileName(filePath)}': {ex.Message}");
-                 return null;
+                HandleError($"Error calculating hash for '{Path.GetFileName(filePath)}': {ex.Message}");
+                return null;
             }
         }
 
@@ -850,7 +851,7 @@ namespace TestCryption
             return true;
         }
 
-         // Simple check for invalid filename chars
+        // Simple check for invalid filename chars
         private bool HasInvalidFilenameChars(string filename)
         {
             return !string.IsNullOrWhiteSpace(filename) && filename.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0;
@@ -859,11 +860,12 @@ namespace TestCryption
 
         private bool IsFolderValid(string folderPath, string errorMessage = "Default folder not set or invalid.")
         {
-             if (string.IsNullOrWhiteSpace(folderPath) || !Directory.Exists(folderPath))
+            if (string.IsNullOrWhiteSpace(folderPath) || !Directory.Exists(folderPath))
             {
                 // Only show error message if one was provided (avoids errors on startup)
-                if (!string.IsNullOrEmpty(errorMessage)) {
-                     HandleError(errorMessage);
+                if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    HandleError(errorMessage);
                 }
                 return false;
             }
@@ -873,7 +875,8 @@ namespace TestCryption
         // Loads AES Key and IV from the specified file path.
         private (byte[] Key, byte[] IV) LoadAesKeyFromFile(string filePath)
         {
-            if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath)) {
+            if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
+            {
                 HandleError($"AES Key file not found: {filePath}"); return (null, null);
             }
             try
@@ -886,7 +889,8 @@ namespace TestCryption
                     else if (line.StartsWith("IV=", StringComparison.OrdinalIgnoreCase)) ivBase64 = line.Substring(3);
                 }
 
-                if (string.IsNullOrEmpty(keyBase64) || string.IsNullOrEmpty(ivBase64)) {
+                if (string.IsNullOrEmpty(keyBase64) || string.IsNullOrEmpty(ivBase64))
+                {
                     HandleError($"Invalid key file format: '{Path.GetFileName(filePath)}'. 'Key=' or 'IV=' missing/empty."); return (null, null);
                 }
 
@@ -899,7 +903,8 @@ namespace TestCryption
         // Helper to load RSA key from XML, optionally requiring private key
         private RSA LoadRsaKeyFromFile(string filePath, bool requirePrivateKey)
         {
-             if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath)) {
+            if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
+            {
                 HandleError($"RSA Key file not found: {filePath}"); return null;
             }
             try
@@ -918,9 +923,9 @@ namespace TestCryption
                     }
                     catch (CryptographicException)
                     {
-                         HandleError($"Operation requires an RSA private key, but the selected file '{Path.GetFileName(filePath)}' does not contain one.");
-                         rsa.Dispose(); // Dispose the object created
-                         return null;
+                        HandleError($"Operation requires an RSA private key, but the selected file '{Path.GetFileName(filePath)}' does not contain one.");
+                        rsa.Dispose(); // Dispose the object created
+                        return null;
                     }
                 }
                 return rsa; // Success
