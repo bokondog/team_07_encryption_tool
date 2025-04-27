@@ -146,24 +146,6 @@
              <Setter Property="BorderThickness" Value="0"/> <!-- No border per item by default -->
              <Setter Property="Padding" Value="5,3"/>
              <Setter Property="HorizontalContentAlignment" Value="Stretch"/> <!-- Make content fill width -->
-             <Setter Property="Template">
-                 <Setter.Value>
-                     <ControlTemplate TargetType="ListViewItem">
-                         <Border Background="{TemplateBinding Background}"
-                                 BorderBrush="{TemplateBinding BorderBrush}"
-                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                 Padding="{TemplateBinding Padding}"
-                                 SnapsToDevicePixels="true">
-                             <!-- Use ContentPresenter for non-GridView, GridViewRowPresenter otherwise -->
-                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                             <!-- For GridView, replace ContentPresenter above with: -->
-                             <!-- <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/> -->
-                         </Border>
-                     </ControlTemplate>
-                 </Setter.Value>
-             </Setter>
              <Style.Triggers>
                  <Trigger Property="IsMouseOver" Value="True">
                      <Setter Property="Background" Value="{StaticResource HoverBackgroundBrush}"/>
