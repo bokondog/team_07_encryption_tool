@@ -31,12 +31,6 @@ namespace TestCryption
         // Standard AES block size in bytes (used for IV)
         private const int AesBlockSizeInBytes = 16; // 128 bits / 8 bits/byte
 
-        // Hashing algorithm instance (reusable) - Use SHA256 consistently
-        private static readonly HashAlgorithmName _hashAlgorithmName = HashAlgorithmName.SHA256;
-        // Note: For performance with large files, you might create instances within methods
-        // using 'using var sha256 = SHA256.Create();' instead of reusing a single static instance if thread safety becomes complex.
-        // However, for this UI-driven app, creating per-operation is fine.
-
         public MainWindow()
         {
             InitializeComponent();
@@ -493,7 +487,7 @@ namespace TestCryption
 
         private async void DecryptButton_Click(object sender, RoutedEventArgs e)
         {
-            // --- Input Validation (Unchanged) ---
+            // --- Input Validation ---
             if (!IsFolderValid(_defaultImageFolder, "Decrypted image output folder not set or invalid.")) return;
             if (DecryptCiphertextComboBox.SelectedItem == null) { HandleError("Select a ciphertext file."); return; }
             if (DecryptAesKeyComboBox.SelectedItem == null) { HandleError("Select an AES key."); return; }
@@ -523,7 +517,7 @@ namespace TestCryption
 
             try
             {
-                // --- Decryption Logic (Unchanged) ---
+                // --- Decryption Logic ---
                 (byte[] key, byte[] iv) = LoadAesKeyFromFile(aesKeyPath);
                 if (key == null || iv == null) return;
                 string base64Encrypted = File.ReadAllText(ciphertextPath);
@@ -546,10 +540,10 @@ namespace TestCryption
                     }
                 }
 
-                // --- Save decrypted bytes (Unchanged) ---
+                // --- Save decrypted bytes ---
                 File.WriteAllBytes(outputImagePath, decryptedBytes);
 
-                // *** NEW: Calculate hash of the saved decrypted file ***
+                // *** Calculate hash of the saved decrypted file ***
                 UpdateStatus("Calculating hash of decrypted file...");
                 calculatedHash = CalculateFileHashAsync(outputImagePath); // Use helper
                 if (calculatedHash != null)
@@ -802,7 +796,7 @@ namespace TestCryption
 
         // --- Helper Methods ---
 
-        // New helper method to calculate SHA-256 hash of a file
+        // Calculate SHA-256 hash of a file
         private string CalculateFileHashAsync(string filePath)
         {
             if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
@@ -842,7 +836,6 @@ namespace TestCryption
             }
         }
 
-        // Renamed original ValidateInput for clarity
         private bool ValidateKeyGenInput(string keyName, bool isRsa)
         {
             string keyType = isRsa ? "RSA" : "AES";
@@ -944,7 +937,7 @@ namespace TestCryption
     } // End class MainWindow
 
 
-    // --- Data Classes (Unchanged) ---
+    // --- Data Classes ---
     public class KeyInfo { public string Name { get; set; } public string Type { get; set; } public string FilePath { get; set; } }
     public class FileInfoSimple { public string Name { get; set; } public string FilePath { get; set; } }
 
