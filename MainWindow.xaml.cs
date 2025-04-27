@@ -42,7 +42,7 @@ namespace TestCryption
             InitializeComponent();
             LoadSettings(); // Load all settings
             RefreshAllLists(); // Initial load for keys and ciphertext lists
-            //DecryptOutputFormatComboBox.SelectedIndex = 0; // Default to .png
+            DecryptOutputFormatComboBox.SelectedIndex = 0; // Default to .png
         }
 
         // --- Settings Loading/Saving ---
