@@ -25,7 +25,7 @@ namespace TestCryption
             // Add a small artificial delay if MainWindow loads too fast
             // to ensure the splash screen is visible for a minimum duration.
             // Remove or adjust this value as needed.
-            await Task.Delay(1500); // Wait 1.5 seconds (adjust as needed)
+            await Task.Delay(2500); // Wait 1.5 seconds (adjust as needed)
             // --------------------
 
             // 2. Create the main window (this loads its resources, etc.)
