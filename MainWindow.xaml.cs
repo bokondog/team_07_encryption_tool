@@ -25,6 +25,8 @@ namespace TestCryption
         private const string RsaSuffix = "_rsa.xml";
         private const string CiphertextSuffix = ".txt";
         private const string EncryptedAesKeySuffix = ".txt"; // Encrypted AES keys saved as .txt
+        private const string DecryptedAesKeyPrefix = "decrypted_";
+        private const string GeneratedAesKeyPrefix = "generated_";
 
         // Standard AES block size in bytes (used for IV)
         private const int AesBlockSizeInBytes = 16; // 128 bits / 8 bits/byte
@@ -206,7 +208,7 @@ namespace TestCryption
             if (!ValidateKeyGenInput(AesKeyNameTextBox.Text, isRsa: false)) return;
 
             string keyName = AesKeyNameTextBox.Text.Trim();
-            string fileName = keyName + AesSuffix;
+            string fileName = GeneratedAesKeyPrefix + keyName + AesSuffix;
             string filePath = Path.Combine(_defaultKeyFolder, fileName);
 
             if (File.Exists(filePath))
@@ -655,7 +657,7 @@ namespace TestCryption
 
             string encryptedKeyPath = DecryptRsaEncryptedAesKeyComboBox.SelectedValue as string;
             string rsaKeyPath = DecryptRsaPrivateKeyComboBox.SelectedValue as string;
-            string outputKeyName = DecryptRsaOutputFilenameTextBox.Text.Trim();
+            string outputKeyName = DecryptedAesKeyPrefix + DecryptRsaOutputFilenameTextBox.Text.Trim();
             string outputDecryptedKeyPath = Path.Combine(_defaultKeyFolder, outputKeyName + AesSuffix); // Save to main key folder
 
             if (File.Exists(outputDecryptedKeyPath))
